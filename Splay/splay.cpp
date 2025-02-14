@@ -1,5 +1,8 @@
 #include "splay.h"
 
+MyException noroot("No Root Node!");
+MyException dupe("Duplicate key");
+MyException nokey("Key not found!");
 SplayTree::SplayTree() 
 {
     root = nullptr; 
@@ -97,6 +100,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
     //if key is already in tree, error
     if(root->key == key){
+        throw MyException("Duplicate key detected!");
         return root;
     }
 
@@ -122,6 +126,7 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     // complete this
     if (root == nullptr){
         //ERROR! NO TREE
+        throw MyException("No root node found!");
         return nullptr;
     }
 
@@ -130,6 +135,7 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     //if no key, return root without change
     if(root->key != key){
         //ERROR! NO KEY!
+        throw MyException("Error! Key not found!");
         return root;
     }
     //if no children
