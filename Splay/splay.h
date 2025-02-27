@@ -1,6 +1,6 @@
 #ifndef SPLAYTREE_H
 #define SPLAYTREE_H
-
+#include "customErrorClass.h"
 #include <iostream>
 using namespace std;
 
