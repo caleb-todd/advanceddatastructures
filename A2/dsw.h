@@ -1,6 +1,6 @@
 #ifndef BST_H
 #define BST_H
-
+#include "customErrorClass.h"
 #include <iostream>
 #include <vector>
 #include <math.h>

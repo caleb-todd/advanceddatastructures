@@ -1,7 +1,18 @@
 #include "dsw.h"
-
+MyException noroot("No Root Node!");
+MyException dupe("Duplicate key");
+MyException nokey("Key not found!");
 // ----------------------- Private -------------------------------- 
+int findsize(Node* node){
+    if(node == nullptr){
+        return 0;
+    }
+    int leftside = findsize(node->left);
+    int rightside = findsize(node->right);
 
+    return 1 + leftside + rightside;
+
+}
 void BST::rotateRight(Node*& node) {
     if (node == nullptr || node->left == nullptr) 
         return;
@@ -24,28 +35,33 @@ void BST::rotateLeft(Node*& node) {
 }
 
 void BST::createVine() {
-    if (root == nullptr) 
+    if (root == nullptr) {
+        throw MyException("No root found!");
         return;
+    }
+        
 
     Node* grandparent = nullptr;
     Node* parent = root;
-    Node* child = root->left;
+    Node* child = root->right;
 
     while (parent != nullptr) 
     {
-        if (child != nullptr)
+        int childtreesize = findsize(child);
+        
+        if (child != nullptr && childtreesize > 2)
         {
-            rotateRight(parent);
+            rotateLeft(parent);
             if (grandparent == nullptr)
                 root = parent;
             else
                 grandparent->right = parent;
-            child = parent->left;
+            child = parent->right;
         } else {
             grandparent = parent;
             parent = parent->right;
             if (parent != nullptr)
-                child = parent->left;
+                child = parent->right;
         }
     }
 }
@@ -63,26 +79,30 @@ void BST::rebuildTree(int size) {
         performRotations(size);
 }
 
+
 // Perform left rotations on every second node
 void BST::performRotations(int count) {
     Node* grandparent = nullptr;
     Node* parent = root;
-    Node* child = root->right;
+    Node* child = root->left;
 
     for (int i = 0; i < count; i++) {
-        if (child == nullptr) 
+        if (child == nullptr) {
+            throw MyException("Child not found1");
             break;
+        }
+            
 
-        rotateLeft(parent);
+        rotateRight(parent);
         if (grandparent == nullptr)
             root = parent;
         else
-            grandparent->right = parent;
+            grandparent->left = parent;
 
         grandparent = parent;
-        parent = parent->right;
+        parent = parent->left;
         if (parent != nullptr)
-            child = parent->right;
+            child = parent->left;
     }
 }
 
@@ -90,6 +110,7 @@ void BST::printTree(Node* root, int space) {
     const int COUNT = 10;
 
     if (root == nullptr) {
+        throw MyException("No root found!");
         return;
     }
 
@@ -169,7 +190,7 @@ void BST::dswBalance() {
    Node* temp = root;
    while (temp != nullptr) {
        size++;
-       temp = temp->right;
+       temp = temp->left;
    }
 
    // Step 3: Rebuild tree to balance it
